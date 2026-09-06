@@ -83,7 +83,8 @@ const deleteUserById = (id) => {
     return users["users_list"].splice(index,1)[0];
 };
 
-app.delete("/users:id", (req,res) => {
+app.delete("/users/:id", (req,res) => {
+    
     const id = req.params["id"];
     const result = deleteUserById(id);
 
