@@ -15,12 +15,16 @@ function MyApp() {
   }
 
   function updateList(person) {
-    postUser(person)
-      .then(() => setCharacters([...characters, person]))
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  postUser(person)
+    .then((response) => {
+      if (response.status === 201) {
+        setCharacters([...characters, person]);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
   function fetchUsers() {
   const promise = fetch("http://localhost:8000/users");
