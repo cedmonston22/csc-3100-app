@@ -64,7 +64,13 @@ app.get("/users/:id", (req, res) => {
   }
 });
 
+const generateId = () => {
+  return Math.random().toString(36).substring(2, 11);
+};
+
+
 const addUser = (user) => {
+  user.id = generateId();
   users["users_list"].push(user);
   return user;
 };
