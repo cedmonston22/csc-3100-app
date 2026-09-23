@@ -46,11 +46,6 @@ const users = {
   ],
 };
 
-const findUserByName = (name) => {
-    return users["users_list"].filter((user) => user["name"] == name);
-};
-
-
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"];
   userService
@@ -105,23 +100,14 @@ app.delete("/users/:id", (req,res) => {
     }
 });
 
-const findUserByNameAndJob = (name, job) => {
-    return users["users_list"].filter((user) => user["name"] === name && user["job"] === job);
-};
-
-app.get("/users", (req,res) => {
-    const name = req.query.name;
-    const job = req.query.job;
-
-    let result;
-
-    if (name !== undefined && job !== undefined) {
-        result = findUserByNameAndJob(name, job);
-    } else if (name !== undefined) {
-        result = findUserByName(name);
-    } else {
-        result = users["users_list"];
-    }
-
-    res.send({ users_list: result });
+app.get("/users", (req, res) => {
+  const name = req.query.name;
+  const job = req.query.job;
+  userService
+    .getUsers(name, job)
+    .then((result) => res.send({ users_list: result }))
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send();
+    });
 });
