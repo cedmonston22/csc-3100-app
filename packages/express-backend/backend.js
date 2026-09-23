@@ -68,21 +68,19 @@ app.get("/users/:id", (req, res) => {
     });
 });
 
-const generateId = () => {
-  return Math.random().toString(36).substring(2, 11);
-};
-
-
-const addUser = (user) => {
-  user.id = generateId();
-  users["users_list"].push(user);
-  return user;
-};
-
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  const newUser = addUser(userToAdd);
-  res.status(201).send(newUser);
+  userService
+    .addUser(userToAdd)
+    .then((newUser) => res.status(201).send(newUser))
+    .catch((error) => {
+      console.log(error);
+      if (error.name === "ValidationError") {
+        res.status(400).send(error.message);
+      } else {
+        res.status(500).send();
+      }
+    });
 });
 
 const deleteUserById = (id) => {
