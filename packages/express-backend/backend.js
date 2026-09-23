@@ -78,26 +78,21 @@ app.post("/users", (req, res) => {
     });
 });
 
-const deleteUserById = (id) => {
-    const index = users["users_list"].findIndex((user) => user["id"] == id);
-
-    if (index === -1) {
-        return undefined
-    }
-
-    return users["users_list"].splice(index,1)[0];
-};
-
-app.delete("/users/:id", (req,res) => {
-    
-    const id = req.params["id"];
-    const result = deleteUserById(id);
-
-    if (result === undefined){
+app.delete("/users/:id", (req, res) => {
+  const id = req.params["id"];
+  userService
+    .removeUser(id)
+    .then((result) => {
+      if (result === null) {
         res.status(404).send("Resource not found.");
-    }else{
-        res.status(204).send()
-    }
+      } else {
+        res.status(204).send();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send();
+    });
 });
 
 app.get("/users", (req, res) => {
